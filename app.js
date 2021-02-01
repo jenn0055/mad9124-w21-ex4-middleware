@@ -1,8 +1,8 @@
 'use strict'
 // load dependencies
-const {cars} = require('./cars.js')
+const {cars} = require('./data/index.js')
 const express = require('express')
-const carsRouter = require('./carsRouter.js')
+const carsRouter = require('./routes/cars.js')
 
 // create the express app
 const app = express()

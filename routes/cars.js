@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {cars} = require('./cars.js')
+const {cars} = require('../data/index.js')
 
 router.get('/', (req, res) => res.send({data: cars}))
 
