@@ -1,25 +1,15 @@
-'use strict'
-// load dependencies
-const {cars} = require('./cars.js')
 const express = require('express')
-const carsRouter = require('./carsRouter.js')
+const router = express.Router()
+const {cars} = require('./cars.js')
 
-// create the express app
-const app = express()
+router.get('/', (req, res) => res.send({data: cars}))
 
-// configure express middleware
-app.use(express.json())
-app.use('/api/cars', carsRouter)
-
-// define routes
-app.get('/api/cars', (req, res) => res.send({data: cars}))
-
-app.get('/api/cars/:carId', (req, res) => {
-  const car = cars.find(car => car.id === parseInt(req.params.carId))
-  res.send({data: car})
-})
-
-app.post('/api/cars', (req, res) => {
+router.get('/:carId', (req, res) => {
+    const car = cars.find(car => car.id === parseInt(req.params.carId))
+    res.send({data: car})
+  })
+  
+router.post('/', (req, res) => {
   const {make, model, colour} = req.body
   const newCar = {
     id: Date.now(),
@@ -31,7 +21,7 @@ app.post('/api/cars', (req, res) => {
   res.status(201).send({data: newCar})
 })
 
-app.put('/api/cars/:carId', (req, res) => {
+router.put('/:carId', (req, res) => {
   const id = parseInt(req.params.carId)
   const index = cars.findIndex(car => car.id === id)
   if (index < 0) {
@@ -52,7 +42,7 @@ app.put('/api/cars/:carId', (req, res) => {
   }
 })
 
-app.patch('/api/cars/:carId', (req, res) => {
+router.patch('/:carId', (req, res) => {
   const id = parseInt(req.params.carId)
   const index = cars.findIndex(car => car.id === id)
   if (index < 0) {
@@ -73,7 +63,7 @@ app.patch('/api/cars/:carId', (req, res) => {
   }
 })
 
-app.delete('/api/cars/:carId', (req, res) => {
+router.delete('/:carId', (req, res) => {
   const id = parseInt(req.params.carId)
   const index = cars.findIndex(car => car.id === id)
   if (index < 0) {
@@ -92,7 +82,4 @@ app.delete('/api/cars/:carId', (req, res) => {
     res.send({data: deletedCars[0]})
   }
 })
-
-// start listening for HTTP requests
-const port = process.env.port || 3030
-app.listen(port, () => console.log(`Server listening on port ${port} ...`))
+module.exports = router
